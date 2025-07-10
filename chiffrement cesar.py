@@ -26,6 +26,23 @@ def generate_key(n):
     return key
 
 
+def generate_dkey(key):
+    """
+    generate_dkey(key)
+    Fonction qui génère une clé de déchiffrement en inversant les paires clé:valeur
+
+    Paramètres:
+    key (dict): clé de mappage original
+
+    Return:
+    dict: clé de déchiffrement (paires inversées)
+    """
+    dkey = {}
+    for original_char, encrypted_char in key.items():
+        dkey[encrypted_char] = original_char
+    return dkey
+
+
 def encrypt(key, message):
     """
     encrypt(key, message)
@@ -62,3 +79,26 @@ message = "AINSI VA LA VIE"
 secret = encrypt(key, message)
 print(secret)
 
+# Test du déchiffrement avec la clé inversée
+print("--- Test de déchiffrement ---")
+
+# Méthode 1: Utiliser 26-3 comme clf
+dkey_method1 = generate_key(26-3)
+decrypted1 = encrypt(dkey_method1, secret)
+print(f"Déchiffrement méthode 1 (26-3): {decrypted1}")
+
+# Méthode 2: Utiliser la clé inversée
+dkey_method2 = generate_dkey(key)
+decrypted2 = encrypt(dkey_method2, secret)
+print(f"Déchiffrement méthode 2 (clé inversée): {decrypted2}")
+print()
+
+
+# Attaque sur le chiffrement de César
+print("####################################")
+print("Attaque sur le chiffrement de César")
+for i in range(26):
+	dkey = generate_key(i)
+	message = encrypt(dkey, secret)
+	print(message)
+print("####################################")
